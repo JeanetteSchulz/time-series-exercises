@@ -107,8 +107,24 @@ def get_superstore():
         print("Creating New file...") 
         
         df = fresh_superstore()
+                    
+    return df
+
+###################################### Prepared Data ################################################
+
+def fast_food():
+    # Obtain the dataframe
+    df = get_superstore()
 
     # Informing the User
-    print("Done!") 
-                    
+    print("Preparing the dataframe...") 
+
+    # Make sure proper date format is understood, to ensure quicker processing
+    df.sale_date = pd.to_datetime(df.sale_date, format = '%a, %d %b %Y %H:%M:%S %Z')
+    # Setting the 'sale_date' column as the Index and sorting that new Index:
+    df = df.set_index('sale_date').sort_index()
+    # Feature Engineering
+    df['month'] = df.index.month
+    df['day_of_week'] = df.index.day_of_week
+    df['sales_total'] = df.sale_amount * df.item_price
     return df
